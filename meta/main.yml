@@ -1,0 +1,25 @@
+galaxy_info:
+  author: bmeme
+  description: Create Drupal project or build it
+  company: Bonsaimeme S.r.l.
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+
+  galaxy_tags:
+    - development
+    - drupal
+    - web
+    - cms
+    - php
+
+dependencies: []

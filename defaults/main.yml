@@ -1,0 +1,30 @@
+---
+## Drupal project directory
+drupal_project_dir: "/var/www/html"
+drupal_project_owner: "www-data"
+
+## Composer variables
+drupal_composer_project_package: "drupal/recommended-project:^8@dev"
+drupal_composer_install_dir: "{{ drupal_project_dir }}"
+drupal_composer_nodev: true
+
+## Drupal required settings
+drupal_build_sitename: "Bmeme Drupal 8 build"
+drupal_build_sitemail: "info@example.com"
+drupal_build_accountmail: "info@example.com"
+drupal_build_accountname: "admin"
+drupal_build_accountpass: "admin"
+drupal_build_dbschema: "mysql"
+drupal_build_dbname: "drupal"
+drupal_build_dbuser: "drupal"
+drupal_build_dbpass: "drupal"
+drupal_build_dbhost: "127.0.0.1"
+drupal_build_dbport: "3306"
+
+# Don't change drupal_build_db_url unless you're sure what you're doing
+drupal_build_db_url: "{{ drupal_build_dbschema }}://{{ drupal_build_dbuser }}:{{ drupal_build_dbpass }}@{{ drupal_build_dbhost }}:{{ drupal_build_dbport }}/{{ drupal_build_dbname }}"
+drupal_build_install_profile: "standard"
+
+# Enable modules after first Drupal installation
+drupal_build_enable_modules: []
+drupal_build_drush_path: "{{ drupal_project_dir }}/vendor/drush/bin"

@@ -1,0 +1,73 @@
+---
+- name: Delete old /tmp/composer-project
+  file:
+    path: "/tmp/composer-project"
+    state: absent
+
+- name: Generate Drupal project with composer package in /tmp/composer-project (this may take a while).
+  composer:
+    command: create-project
+    arguments: "{{ drupal_composer_project_package }} --stability dev --no-interaction"
+    working_dir: /tmp/composer-project
+  environment:
+    COMPOSER_PROCESS_TIMEOUT: 1200
+
+- name: Ensure drupal_composer_install_dir directory has proper permissions.
+  file:
+    path: "{{ drupal_composer_install_dir }}"
+    state: directory
+    owner: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_owner }}"
+    mode: 0775
+  failed_when: false
+
+- name: Move Drupal project files to drupal_composer_install_dir (this may take a while).
+  command: >
+    cp -r /tmp/composer-project/. {{ drupal_composer_install_dir }}/
+    creates={{ drupal_project_dir }}/web/index.php
+  become: false
+
+- name: Remove .git folder
+  file:
+    path: "{{ drupal_project_dir }}/.git"
+    state: absent
+
+- name: Remove .gitignore file
+  file:
+    path: "{{ drupal_project_dir }}/.gitignore"
+    state: absent
+
+- name: Apply gitignore template
+  copy:
+    src: templates/gitignore.template
+    dest: "{{ drupal_project_dir }}/.gitignore"
+    owner: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_owner }}"
+    mode: "u=rw,g=r,o=r"
+
+- name: Create Bin directory
+  file:
+    path: "{{ drupal_project_dir }}/bin"
+    state: directory
+    mode: 0755
+
+- name: Add Bin directory to composer config
+  composer:
+    command: config
+    arguments: bin-dir bin/
+    working_dir: "{{ drupal_project_dir }}"
+
+- name: Create composer.patches.json
+  copy:
+    dest: "{{ drupal_project_dir }}/composer.patches.json"
+    content: |
+      {
+        "patches": {
+        }
+      }
+
+- name: Add composer.patches.json file to composer config
+  composer:
+    command: config
+    arguments: extra.patches-file composer.patches.json
+    working_dir: "{{ drupal_project_dir }}"

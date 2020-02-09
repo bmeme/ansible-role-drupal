@@ -1,0 +1,36 @@
+---
+- name: Check if Drupal is already set up.
+  stat: "path={{ drupal_project_dir }}/web/index.php"
+  register: drupal_site
+  ignore_errors: true
+
+- name: Define drupal_site_exists.
+  set_fact:
+    drupal_site_exists: "{{ drupal_site.stat.exists|default(false) }}"
+
+- include_tasks: "{{ drupal_build_before_create | default('empty.yml') }}"
+  when: not drupal_site_exists
+
+- include_tasks: create.yml
+  when: not drupal_site_exists
+
+- include_tasks: "{{ drupal_build_after_create | default('empty.yml') }}"
+  when: not drupal_site_exists
+
+- include_tasks: "{{ drupal_build_before_composer | default('empty.yml') }}"
+
+- include_tasks: composer.yml
+
+- include_tasks: "{{ drupal_build_after_composer | default('empty.yml') }}"
+
+- include_tasks: "{{ drupal_build_before_install | default('empty.yml') }}"
+
+- include_tasks: install.yml
+
+- include_tasks: "{{ drupal_build_after_install | default('empty.yml') }}"
+
+- include_tasks: "{{ drupal_build_before_finalize | default('empty.yml') }}"
+
+- include_tasks: finalize.yml
+
+- include_tasks: "{{ drupal_build_after_finalize | default('empty.yml') }}"

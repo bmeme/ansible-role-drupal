@@ -1,0 +1,11 @@
+---
+- name: Run composer install (this may take a while).
+  composer:
+    command: install
+    working_dir: "{{ drupal_composer_install_dir }}"
+    no_dev: "{{ drupal_composer_nodev }}"
+
+- name: Install Drupal Scaffold
+  command: "composer drupal:scaffold"
+  args:
+    chdir: "{{ drupal_project_dir }}"

@@ -1,0 +1,18 @@
+---
+- name: Check if Drupal config exists
+  stat:
+    path: "{{ drupal_project_dir }}/config/sync/system.site.yml"
+  register: drupal_config_exists
+
+- name: Execute installation from scratch
+  shell: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_build_sitename }}\" --site-mail=\"{{ drupal_build_sitemail }}\"
+         --account-mail=\"{{ drupal_build_accountmail }}\" --account-name=\"{{ drupal_build_accountname }}\" --account-pass=\"{{ drupal_build_accountpass }}\"
+         --db-url=\"{{ drupal_build_db_url }}\" \"{{ drupal_build_install_profile }}\""
+  when: drupal_config_exists.stat.exists == false
+
+- name: Install Drupal by configuration
+  shell: "{{ drupal_project_dir }}/bin/drush site:install -y --site-name=\"{{ drupal_build_sitename }}\" --site-mail=\"{{ drupal_build_sitemail }}\"
+         --account-mail=\"{{ drupal_build_accountmail }}\" --account-name=\"{{ drupal_build_accountname }}\" --account-pass=\"{{ drupal_build_accountpass }}\"
+         --existing-config"
+  when: drupal_config_exists.stat.exists == true
+

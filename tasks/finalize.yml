@@ -1,0 +1,18 @@
+---
+- name: Install mandatory modules
+  shell: "{{ drupal_build_drush_path }}/drush pm:enable -y {{ item }}"
+  loop: "{{ drupal_build_enable_modules }}"
+  when: drupal_config_exists.stat.exists == false
+
+- name: Export Drupal Configuration
+  shell: "{{ drupal_build_drush_path }}/drush config:export -y sync"
+  when: drupal_config_exists.stat.exists == false
+
+- name: Check locale
+  shell: "{{ drupal_build_drush_path }}/drush locale:check -y"
+
+- name: Update locale
+  shell: "{{ drupal_build_drush_path }}/drush locale:update -y"
+
+- name: Clear Drupal cache
+  shell: "{{ drupal_build_drush_path }}/drush cr -y"
