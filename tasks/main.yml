@@ -3,12 +3,18 @@
   stat: "path={{ drupal_project_dir }}/web/index.php"
   register: drupal_site
   ignore_errors: true
-  tags: [ 'create' ]
+  tags: always
 
 - name: Define drupal_site_exists.
   set_fact:
     drupal_site_exists: "{{ drupal_site.stat.exists|default(false) }}"
-  tags: [ 'create' ]
+  tags: always
+
+- name: Check if Drupal config exists
+  stat:
+    path: "{{ drupal_project_dir }}/config/sync/system.site.yml"
+  register: drupal_config_exists
+  tags: always
 
 - include_tasks: "{{ drupal_build_before_create | default('empty.yml') }}"
   when: not drupal_site_exists
