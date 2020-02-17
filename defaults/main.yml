@@ -28,3 +28,4 @@ drupal_build_install_profile: "standard"
 # Enable modules after first Drupal installation
 drupal_build_enable_modules: []
 drupal_build_drush_path: "{{ drupal_project_dir }}/vendor/drush/bin"
+drupal_build_config_path: "{{ drupal_project_dir }}/config/sync"
