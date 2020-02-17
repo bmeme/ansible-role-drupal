@@ -12,7 +12,7 @@
 
 - name: Check if Drupal config exists
   stat:
-    path: "{{ drupal_project_dir }}/config/sync/system.site.yml"
+    path: "{{ drupal_build_config_path }}/system.site.yml"
   register: drupal_config_exists
   tags: always
 
