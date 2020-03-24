@@ -7,8 +7,8 @@
 - name: Generate Drupal project with composer package in /tmp/composer-project (this may take a while).
   composer:
     command: create-project
-    arguments: "{{ drupal_composer_project_package }} --stability dev --no-interaction"
-    working_dir: /tmp/composer-project
+    arguments: "{{ drupal_composer_project_package }} --stability dev --no-interaction --no-install composer-project"
+    working_dir: /tmp
   environment:
     COMPOSER_PROCESS_TIMEOUT: 1200
 
@@ -26,24 +26,6 @@
     cp -r /tmp/composer-project/. {{ drupal_composer_install_dir }}/
     creates={{ drupal_project_dir }}/web/index.php
   become: false
-
-- name: Remove .git folder
-  file:
-    path: "{{ drupal_project_dir }}/.git"
-    state: absent
-
-- name: Remove .gitignore file
-  file:
-    path: "{{ drupal_project_dir }}/.gitignore"
-    state: absent
-
-- name: Apply gitignore template
-  copy:
-    src: templates/gitignore.template
-    dest: "{{ drupal_project_dir }}/.gitignore"
-    owner: "{{ drupal_project_owner }}"
-    group: "{{ drupal_project_owner }}"
-    mode: "u=rw,g=r,o=r"
 
 - name: Create Bin directory
   file:
@@ -71,3 +53,27 @@
     command: config
     arguments: extra.patches-file composer.patches.json
     working_dir: "{{ drupal_project_dir }}"
+
+- name: Require drush module
+  composer:
+    command: require
+    arguments: "drush/drush"
+    working_dir: "{{ drupal_project_dir }}"
+
+- name: Remove .git folder
+  file:
+    path: "{{ drupal_project_dir }}/.git"
+    state: absent
+
+- name: Remove .gitignore file
+  file:
+    path: "{{ drupal_project_dir }}/.gitignore"
+    state: absent
+
+- name: Apply gitignore template
+  copy:
+    src: templates/gitignore.template
+    dest: "{{ drupal_project_dir }}/.gitignore"
+    owner: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_owner }}"
+    mode: "u=rw,g=r,o=r"
