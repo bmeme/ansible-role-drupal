@@ -32,9 +32,9 @@
     state: absent
 
 - name: Move Drupal project files to drupal_project_dir (this may take a while).
-  command: >
-    cp -r /tmp/composer-project/. {{ drupal_project_dir }}/
-    creates={{ drupal_project_dir }}/web/index.php
+  command:
+    cmd: "cp -r /tmp/composer-project/. {{ drupal_project_dir }}/"
+    creates: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
   become: false
 
 - name: Create Bin directory

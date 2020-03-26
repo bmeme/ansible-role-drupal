@@ -1,6 +1,6 @@
 ---
 - name: Check if Drupal is already set up.
-  stat: "path={{ drupal_project_dir }}/web/index.php"
+  stat: "path={{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
   register: drupal_site
   ignore_errors: true
   tags: always
