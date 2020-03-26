@@ -2,6 +2,7 @@
 ## Drupal project directory
 drupal_project_dir: "/var/www/html"
 drupal_project_owner: "www-data"
+drupal_project_group: "www-data"
 drupal_project_web_root: "web"
 
 ## Composer variables

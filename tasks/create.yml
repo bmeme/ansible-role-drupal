@@ -17,7 +17,7 @@
     path: "{{ drupal_project_dir }}"
     state: directory
     owner: "{{ drupal_project_owner }}"
-    group: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_group }}"
     mode: 0775
   failed_when: false
 
