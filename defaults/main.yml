@@ -7,6 +7,7 @@ drupal_project_owner: "www-data"
 drupal_composer_project_package: "drupal/recommended-project:^8@dev"
 drupal_composer_install_dir: "{{ drupal_project_dir }}"
 drupal_composer_nodev: true
+drupal_composer_prefer_dist: false
 
 ## Drupal required settings
 drupal_build_sitename: "Bmeme Drupal 8 build"

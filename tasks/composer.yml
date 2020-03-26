@@ -4,6 +4,7 @@
     command: install
     working_dir: "{{ drupal_composer_install_dir }}"
     no_dev: "{{ drupal_composer_nodev }}"
+    prefer_dist: "{{ drupal_composer_prefer_dist }}"
 
 - name: Install Drupal Scaffold
   command: "composer drupal:scaffold"
