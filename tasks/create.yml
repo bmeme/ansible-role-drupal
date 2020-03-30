@@ -63,9 +63,3 @@
     command: config
     arguments: extra.patches-file composer.patches.json
     working_dir: "{{ drupal_project_dir }}"
-
-- name: Require drush module
-  composer:
-    command: require
-    arguments: "drush/drush --no-update"
-    working_dir: "{{ drupal_project_dir }}"

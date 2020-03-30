@@ -10,3 +10,9 @@
   command: "composer drupal:scaffold"
   args:
     chdir: "{{ drupal_project_dir }}"
+
+- name: Ensure drush module install
+  composer:
+    command: require
+    arguments: "drush/drush"
+    working_dir: "{{ drupal_project_dir }}"
