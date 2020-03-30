@@ -1,6 +1,7 @@
 ---
 - name: Check if Drupal is already set up.
-  stat: "path={{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
+  stat:
+    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
   register: drupal_site
   ignore_errors: true
   tags: always
@@ -13,7 +14,13 @@
 - name: Check if Drupal config exists
   stat:
     path: "{{ drupal_build_config_path }}/system.site.yml"
-  register: drupal_config_exists
+  register: drupal_config
+  ignore_errors: true
+  tags: always
+
+- name: Define drupal_config_exists
+  set_fact:
+    drupal_config_exists: "{{ drupal_config.stat.exists|default(false) }}"
   tags: always
 
 - include_tasks: "{{ drupal_build_before_create | default('empty.yml') }}"

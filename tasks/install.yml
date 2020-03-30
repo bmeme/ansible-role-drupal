@@ -3,11 +3,11 @@
   shell: "{{ drupal_build_drush_path }}/drush site:install --site-name=\"{{ drupal_build_sitename }}\" --site-mail=\"{{ drupal_build_sitemail }}\"
          --account-mail=\"{{ drupal_build_accountmail }}\" --account-name=\"{{ drupal_build_accountname }}\" --account-pass=\"{{ drupal_build_accountpass }}\"
          --db-url=\"{{ drupal_build_db_url }}\" \"{{ drupal_build_install_profile }}\""
-  when: drupal_config_exists.stat.exists == false
+  when: not drupal_config_exists
 
 - name: Install Drupal by configuration
   shell: "{{ drupal_build_drush_path }}/drush site:install -y --site-name=\"{{ drupal_build_sitename }}\" --site-mail=\"{{ drupal_build_sitemail }}\"
          --account-mail=\"{{ drupal_build_accountmail }}\" --account-name=\"{{ drupal_build_accountname }}\" --account-pass=\"{{ drupal_build_accountpass }}\"
          --existing-config"
-  when: drupal_config_exists.stat.exists == true
+  when: drupal_config_exists
 
