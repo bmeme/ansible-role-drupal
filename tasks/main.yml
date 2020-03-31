@@ -23,6 +23,18 @@
     drupal_config_exists: "{{ drupal_config.stat.exists|default(false) }}"
   tags: always
 
+- name: Check if Composer lock exists
+  stat:
+    path: "{{ drupal_project_dir }}/composer.lock"
+  register: composer_lock
+  ignore_errors: true
+  tags: always
+
+- name: Define composer_lock_exists
+  set_fact:
+    composer_lock_exists: "{{ composer_lock.stat.exists|default(false) }}"
+  tags: always
+
 - include_tasks: "{{ drupal_build_before_create | default('empty.yml') }}"
   when: not drupal_site_exists
   tags: [ 'create' ]

@@ -16,3 +16,4 @@
     command: require
     arguments: "drush/drush"
     working_dir: "{{ drupal_project_dir }}"
+  when: not composer_lock_exists
