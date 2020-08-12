@@ -1,0 +1,18 @@
+---
+- name: Converge
+  hosts: all
+
+  environment:
+    COMPOSER_MEMORY_LIMIT: '-1'
+
+  vars_files:
+    - converge-vars.yml
+
+  roles:
+    - { role: geerlingguy.mysql }
+    - { role: ansible-role-drupal }
+
+  tasks:
+    - name: Re-exec role
+      include_role:
+        name: ansible-role-drupal

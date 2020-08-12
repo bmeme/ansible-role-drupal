@@ -1,0 +1,20 @@
+---
+- name: Ensure if Drupal project exists
+  stat:
+    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
+  register: drupal_site
+  ignore_errors: true
+
+- name: Define drupal_site_exists.
+  set_fact:
+    drupal_site_exists: "{{ drupal_site.stat.exists|default(false) }}"
+
+- name: Ensure if Drupal config exists
+  stat:
+    path: "{{ drupal_project_dir }}/config/sync/system.site.yml"
+  register: drupal_config
+  ignore_errors: true
+
+- name: Define drupal_config_exists
+  set_fact:
+    drupal_config_exists: "{{ drupal_config.stat.exists|default(false) }}"

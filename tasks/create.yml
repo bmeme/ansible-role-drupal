@@ -1,5 +1,5 @@
 ---
-- name: Delete old /tmp/composer-project
+- name: Ensure temporary directory does not exists
   file:
     path: "/tmp/composer-project"
     state: absent
@@ -7,12 +7,12 @@
 - name: Generate Drupal project with composer package in /tmp/composer-project (this may take a while).
   composer:
     command: create-project
-    arguments: "{{ drupal_composer_project_package }} composer-project --stability dev --no-install"
+    arguments: "{{ drupal_project_composer_project }} composer-project"
     working_dir: /tmp
   environment:
     COMPOSER_PROCESS_TIMEOUT: 1200
 
-- name: Ensure drupal_project_dir directory has proper permissions.
+- name: Ensure drupal_project_dir directory exists and has proper permissions.
   file:
     path: "{{ drupal_project_dir }}"
     state: directory
@@ -21,23 +21,13 @@
     mode: 0775
   failed_when: false
 
-- name: Remove .git folder
-  file:
-    path: "{{ drupal_project_dir }}/.git"
-    state: absent
-
-- name: Remove .gitignore file
-  file:
-    path: "{{ drupal_project_dir }}/.gitignore"
-    state: absent
-
 - name: Move Drupal project files to drupal_project_dir (this may take a while).
   command:
     cmd: "cp -r /tmp/composer-project/. {{ drupal_project_dir }}/"
     creates: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
   become: false
 
-- name: Create Bin directory
+- name: Create Application "bin" directory
   file:
     path: "{{ drupal_project_dir }}/bin"
     state: directory
@@ -47,6 +37,12 @@
   composer:
     command: config
     arguments: bin-dir bin/
+    working_dir: "{{ drupal_project_dir }}"
+
+- name: Ensure "cweagans/composer-patches" package is installed
+  composer:
+    command: require
+    arguments: cweagans/composer-patches
     working_dir: "{{ drupal_project_dir }}"
 
 - name: Create composer.patches.json

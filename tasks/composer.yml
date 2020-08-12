@@ -2,7 +2,7 @@
 - name: Run composer install (this may take a while).
   composer:
     command: install
-    working_dir: "{{ drupal_composer_install_dir }}"
+    working_dir: "{{ drupal_project_dir }}"
     no_dev: "{{ drupal_composer_nodev }}"
     prefer_dist: "{{ drupal_composer_prefer_dist }}"
 
@@ -10,10 +10,10 @@
   command: "composer drupal:scaffold"
   args:
     chdir: "{{ drupal_project_dir }}"
+  changed_when: False
 
-- name: Ensure drush module install
+- name: Ensure Drush is correctly installed
   composer:
     command: require
-    arguments: "drush/drush"
+    arguments: drush/drush
     working_dir: "{{ drupal_project_dir }}"
-  when: not composer_lock_exists
