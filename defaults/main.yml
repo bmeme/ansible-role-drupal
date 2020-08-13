@@ -3,32 +3,27 @@
 drupal_project_dir: "/var/www/html"
 drupal_project_owner: "www-data"
 drupal_project_group: "www-data"
+drupal_project_composer_project: "drupal/recommended-project:^9"
 drupal_project_web_root: "web"
 
-## Composer variables
-drupal_composer_project_package: "drupal/recommended-project:^8@dev"
-drupal_composer_install_dir: "{{ drupal_project_dir }}"
-drupal_composer_nodev: true
+## Drupal install/build settings
+drupal_site_name: "Your new Drupal instance"
+drupal_site_mail: "info@example.com"
+drupal_account_mail: "{{ drupal_site_mail }}"
+drupal_account_name: "admin"
+drupal_account_pass: "admin"
+drupal_db_schema: "mysql"
+drupal_db_name: "drupal"
+drupal_db_user: "drupal"
+drupal_db_pass: "drupal"
+drupal_db_host: "127.0.0.1"
+drupal_db_port: "3306"
+drupal_db_url: "{{ drupal_db_schema }}://{{ drupal_db_user }}:{{ drupal_db_pass }}@{{ drupal_db_host }}:{{ drupal_db_port }}/{{ drupal_db_name }}"
+# Due to a bug (https://www.drupal.org/project/drupal/issues/2982052), if you use the standard profile
+# you will be unable to build your pre-existent drupal instance starting from existing configurations.
+# When this bug will be solved, we will update this role.
+drupal_profile: "minimal"
+
+## Drupal Composer settings
+drupal_composer_nodev: false
 drupal_composer_prefer_dist: false
-
-## Drupal required settings
-drupal_build_sitename: "Bmeme Drupal 8 build"
-drupal_build_sitemail: "info@example.com"
-drupal_build_accountmail: "info@example.com"
-drupal_build_accountname: "admin"
-drupal_build_accountpass: "admin"
-drupal_build_dbschema: "mysql"
-drupal_build_dbname: "drupal"
-drupal_build_dbuser: "drupal"
-drupal_build_dbpass: "drupal"
-drupal_build_dbhost: "127.0.0.1"
-drupal_build_dbport: "3306"
-
-# Don't change drupal_build_db_url unless you're sure what you're doing
-drupal_build_db_url: "{{ drupal_build_dbschema }}://{{ drupal_build_dbuser }}:{{ drupal_build_dbpass }}@{{ drupal_build_dbhost }}:{{ drupal_build_dbport }}/{{ drupal_build_dbname }}"
-drupal_build_install_profile: "standard"
-
-# Enable modules after first Drupal installation
-drupal_build_enable_modules: []
-drupal_build_drush_path: "{{ drupal_project_dir }}/vendor/drush/bin"
-drupal_build_config_path: "{{ drupal_project_dir }}/config/sync"

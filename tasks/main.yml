@@ -1,75 +1,49 @@
 ---
-- name: Check if Drupal is already set up.
-  stat:
-    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
-  register: drupal_site
-  ignore_errors: true
-  tags: always
+# tasks file for ansible-role-drupal
+- include_tasks: setup.yml
+  tags: [ 'setup' ]
 
-- name: Define drupal_site_exists.
-  set_fact:
-    drupal_site_exists: "{{ drupal_site.stat.exists|default(false) }}"
-  tags: always
-
-- name: Check if Drupal config exists
-  stat:
-    path: "{{ drupal_build_config_path }}/system.site.yml"
-  register: drupal_config
-  ignore_errors: true
-  tags: always
-
-- name: Define drupal_config_exists
-  set_fact:
-    drupal_config_exists: "{{ drupal_config.stat.exists|default(false) }}"
-  tags: always
-
-- name: Check if Composer lock exists
-  stat:
-    path: "{{ drupal_project_dir }}/composer.lock"
-  register: composer_lock
-  ignore_errors: true
-  tags: always
-
-- name: Define composer_lock_exists
-  set_fact:
-    composer_lock_exists: "{{ composer_lock.stat.exists|default(false) }}"
-  tags: always
-
-- include_tasks: "{{ drupal_build_before_create | default('empty.yml') }}"
-  when: not drupal_site_exists
+- include_tasks: "{{ drupal_before_create | default('empty.yml') }}"
   tags: [ 'create' ]
+  when:
+    - not drupal_site_exists
 
 - include_tasks: create.yml
-  when: not drupal_site_exists
   tags: [ 'create' ]
+  when:
+    - not drupal_site_exists
 
-- include_tasks: "{{ drupal_build_after_create | default('empty.yml') }}"
-  when: not drupal_site_exists
+- include_tasks: "{{ drupal_after_create | default('empty.yml') }}"
   tags: [ 'create' ]
+  when:
+    - not drupal_site_exists
 
-- include_tasks: "{{ drupal_build_before_composer | default('empty.yml') }}"
-  tags: [ 'composer' ]
-
-- include_tasks: composer.yml
-  tags: [ 'composer' ]
-
-- include_tasks: "{{ drupal_build_after_composer | default('empty.yml') }}"
-  tags: [ 'composer' ]
-
-- include_tasks: "{{ drupal_build_before_install | default('empty.yml') }}"
+- include_tasks: "{{ drupal_before_install | default('empty.yml') }}"
   tags: [ 'install' ]
+  when:
+    - not drupal_config_exists
 
 - include_tasks: install.yml
   tags: [ 'install' ]
+  when:
+    - not drupal_config_exists
 
-- include_tasks: "{{ drupal_build_after_install | default('empty.yml') }}"
+- include_tasks: "{{ drupal_after_install | default('empty.yml') }}"
   tags: [ 'install' ]
+  when:
+    - not drupal_config_exists
 
-- include_tasks: "{{ drupal_build_before_finalize | default('empty.yml') }}"
-  tags: [ 'finalize' ]
+- include_tasks: "{{ drupal_before_build | default('empty.yml') }}"
+  tags: [ 'build' ]
+  when:
+    - drupal_config_exists
 
-- include_tasks: finalize.yml
-  tags: [ 'finalize' ]
+- include_tasks: build.yml
+  tags: [ 'build' ]
+  when:
+    - drupal_config_exists
 
-- include_tasks: "{{ drupal_build_after_finalize | default('empty.yml') }}"
-  tags: [ 'finalize' ]
+- include_tasks: "{{ drupal_after_build | default('empty.yml') }}"
+  tags: [ 'build' ]
+  when:
+    - drupal_config_exists

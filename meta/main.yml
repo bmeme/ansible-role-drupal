@@ -1,6 +1,6 @@
 galaxy_info:
   author: bmeme
-  description: Create Drupal project or build it
+  description: This role allows you to create a Drupal project via composer, install it and re-build it by configs
   company: Bonsaimeme S.r.l.
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4

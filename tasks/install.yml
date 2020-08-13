@@ -1,13 +1,42 @@
 ---
+- name: Ensure all dependencies are satisfied
+  include_tasks: composer.yml
+
 - name: Execute installation from scratch
-  shell: "{{ drupal_build_drush_path }}/drush site:install --site-name=\"{{ drupal_build_sitename }}\" --site-mail=\"{{ drupal_build_sitemail }}\"
-         --account-mail=\"{{ drupal_build_accountmail }}\" --account-name=\"{{ drupal_build_accountname }}\" --account-pass=\"{{ drupal_build_accountpass }}\"
-         --db-url=\"{{ drupal_build_db_url }}\" \"{{ drupal_build_install_profile }}\""
-  when: not drupal_config_exists
+  command: "bin/drush site:install --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
+         --account-mail=\"{{ drupal_account_mail }}\" --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\"
+         --db-url=\"{{ drupal_db_url }}\" \"{{ drupal_profile }}\""
+  changed_when: False
 
-- name: Install Drupal by configuration
-  shell: "{{ drupal_build_drush_path }}/drush site:install -y --site-name=\"{{ drupal_build_sitename }}\" --site-mail=\"{{ drupal_build_sitemail }}\"
-         --account-mail=\"{{ drupal_build_accountmail }}\" --account-name=\"{{ drupal_build_accountname }}\" --account-pass=\"{{ drupal_build_accountpass }}\"
-         --existing-config"
-  when: drupal_config_exists
+- name: Ensure Drupal configuration directory is correctly set
+  lineinfile:
+    path: "{{ drupal_project_dir }}/web/sites/default/settings.php"
+    regexp: "^(.*)config_sync_directory(.*)$"
+    line: "$settings['config_sync_directory'] = '../config/sync';"
 
+- name: Remove Config directory if exists
+  file:
+    path: "{{ drupal_project_dir }}/config"
+    state: absent
+
+- name: Create Config directories structure
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_group }}"
+    mode: 0775
+  with_items:
+    - "{{ drupal_project_dir }}/config"
+    - "{{ drupal_project_dir }}/config/sync"
+
+- name: Export Drupal Configurations
+  command: "bin/drush config:export -y"
+  changed_when: False
+
+- name: Ensure all files right ownership
+  file:
+    path: "{{ drupal_project_dir }}"
+    recurse: yes
+    owner: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_group }}"
