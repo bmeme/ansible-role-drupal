@@ -14,7 +14,7 @@
     bin/drush pm:list --type module --format=csv | grep locale | awk -F, '{print $3}'
   args:
     executable: /bin/bash
-    chdir: {{ drupal_project_dir }}
+    chdir: "{{ drupal_project_dir }}"
   register: locale_state
   changed_when: False
 
