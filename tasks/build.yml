@@ -8,6 +8,14 @@
          --existing-config"
   changed_when: False
 
+- name: Ensure "default" directory is writable by the user
+  file:
+    path: "{{ drupal_project_dir }}/web/sites/default"
+    recurse: yes
+    owner: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_group }}"
+    mode: u+w
+
 - name: Check if locale is enabled
   shell: |
     set -o pipefail
