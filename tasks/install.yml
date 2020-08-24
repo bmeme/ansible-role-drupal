@@ -21,6 +21,7 @@
     path: "{{ drupal_project_dir }}/web/sites/default/settings.php"
     regexp: "^(.*)config_sync_directory(.*)$"
     line: "$settings['config_sync_directory'] = '../config/sync';"
+    mode: 0644
 
 - name: Remove Config directory if exists
   file:
@@ -48,3 +49,4 @@
     recurse: yes
     owner: "{{ drupal_project_owner }}"
     group: "{{ drupal_project_group }}"
+    mode: preserve
