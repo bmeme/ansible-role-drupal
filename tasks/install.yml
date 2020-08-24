@@ -49,4 +49,3 @@
     recurse: yes
     owner: "{{ drupal_project_owner }}"
     group: "{{ drupal_project_group }}"
-    mode: preserve

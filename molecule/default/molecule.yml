@@ -21,7 +21,7 @@ driver:
 lint: |
   set -e
   yamllint .
-  ansible-lint -x 106
+  ansible-lint -x 106 208
 platforms:
   - name: php-7.3.15-apache
     image: bmeme/php:7.3.15-apache
