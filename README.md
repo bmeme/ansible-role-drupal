@@ -2,9 +2,9 @@ Ansible Role: Drupal
 =========
 [![Build Status](https://travis-ci.org/bmeme/ansible-role-drupal.svg?branch=master)](https://travis-ci.org/bmeme/ansible-role-drupal)
 
-Create, Install and Build a [Drupal](http://www.drupal.org) project. 
+Create, Install and Build a [Drupal](http://www.drupal.org) project.
 
-This is the first published Ansible Role produced by [Bmeme](https://www.drupal.org), actually used in our Drupal development process.
+This is the first published Ansible Role produced by [Bmeme](https://www.bmeme.com), actually used in our Drupal development process.
 It was really inspired by other roles we usually use/used and that are really great:
 - [geerlingguy.drupal](https://github.com/geerlingguy/ansible-role-drupal)
 - [ansistrano.deploy](https://github.com/ansistrano/deploy) / [ansistrano.rollback](https://github.com/ansistrano/rollback)
@@ -21,7 +21,7 @@ To correctly use this role you will need a classic LAMP/LEMP stack:
 
 Installation
 --------------
-This is an Ansible role distributed using Ansible Galaxy. 
+This is an Ansible role distributed using Ansible Galaxy.
 In order to install this role you can use the following command.
 
 `$ ansible-galaxy install bmeme.drupal`
@@ -70,7 +70,7 @@ This role executes three main tasks:
 This role automatically recognizes when a Drupal project already exists and skips this set of tasks
 - **install**: Install Drupal instance using drush. At the end of the process, Drupal configurations are automatically exported to the `{{ drupal_project_dir }}/config/sync` directory.
 This role automatically recognized when Drupal installation already exists and skip this set of tasks
-- **build**: Build the Drupal instance via drush by installing from existing exported configurations. 
+- **build**: Build the Drupal instance via drush by installing from existing exported configurations.
 It automatically recognizes the configurations and executes the build set of tasks
 
 Starting from scratch, it performs only the **create** and **install** tasks.
@@ -87,7 +87,7 @@ You can add your custom tasks using the hooks available:
 
 Bmeme way of work
 -----------------
-Bmeme uses this role to automate the creation / installation / build operations of a Drupal project during 
+Bmeme uses this role to automate the creation / installation / build operations of a Drupal project during
 its development process. We use docker as development environment, both locally and in remote test instances.
 The role is performed within our docker images `php` available [here](https://hub.docker.com/r/bmeme/php).
 Same images are also used by the role *molecule* test.

@@ -3,16 +3,25 @@
   include_tasks: composer.yml
 
 - name: Execute installation from scratch
-  command: "bin/drush site:install --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
+  command: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
          --account-mail=\"{{ drupal_account_mail }}\" --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\"
          --db-url=\"{{ drupal_db_url }}\" \"{{ drupal_profile }}\""
   changed_when: False
+
+- name: Ensure "default" directory is writable by the user
+  file:
+    path: "{{ drupal_project_dir }}/web/sites/default"
+    recurse: yes
+    owner: "{{ drupal_project_owner }}"
+    group: "{{ drupal_project_group }}"
+    mode: u+w
 
 - name: Ensure Drupal configuration directory is correctly set
   lineinfile:
     path: "{{ drupal_project_dir }}/web/sites/default/settings.php"
     regexp: "^(.*)config_sync_directory(.*)$"
     line: "$settings['config_sync_directory'] = '../config/sync';"
+    mode: 0644
 
 - name: Remove Config directory if exists
   file:
@@ -31,7 +40,7 @@
     - "{{ drupal_project_dir }}/config/sync"
 
 - name: Export Drupal Configurations
-  command: "bin/drush config:export -y"
+  command: "{{ drupal_project_dir }}/bin/drush config:export -y"
   changed_when: False
 
 - name: Ensure all files right ownership

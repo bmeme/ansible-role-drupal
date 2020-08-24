@@ -48,6 +48,7 @@
 - name: Create composer.patches.json
   copy:
     dest: "{{ drupal_project_dir }}/composer.patches.json"
+    mode: 0644
     content: |
       {
         "patches": {
