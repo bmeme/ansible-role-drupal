@@ -3,7 +3,7 @@
   include_tasks: composer.yml
 
 - name: Install Drupal by configuration
-  command: "bin/drush site:install -y --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
+  command: "{{ drupal_project_dir }}/bin/drush site:install -y --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
          --account-mail=\"{{ drupal_account_mail }}\" --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\"
          --existing-config"
   changed_when: False
@@ -14,19 +14,20 @@
     bin/drush pm:list --type module --format=csv | grep locale | awk -F, '{print $3}'
   args:
     executable: /bin/bash
+    chdir: {{ drupal_project_dir }}
   register: locale_state
   changed_when: False
 
 - name: Ensure locale configurations are checked
-  command: "bin/drush locale:check -y"
+  command: "{{ drupal_project_dir }}/bin/drush locale:check -y"
   when:
     - locale_state == 'Enabled'
 
 - name: Update locale traslations are updated
-  command: "bin/drush locale:update -y"
+  command: "{{ drupal_project_dir }}/bin/drush locale:update -y"
   when:
     - locale_state == 'Enabled'
 
 - name: Clear Drupal cache
-  command: "bin/drush cr -y"
+  command: "{{ drupal_project_dir }}/bin/drush cr -y"
   changed_when: False
