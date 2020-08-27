@@ -10,7 +10,7 @@
 
 - name: Ensure "default" directory is writable by the user
   file:
-    path: "{{ drupal_project_dir }}/web/sites/default"
+    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"
     recurse: yes
     owner: "{{ drupal_project_owner }}"
     group: "{{ drupal_project_group }}"
@@ -18,7 +18,7 @@
 
 - name: Ensure Drupal configuration directory is correctly set
   lineinfile:
-    path: "{{ drupal_project_dir }}/web/sites/default/settings.php"
+    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default/settings.php"
     regexp: "^(.*)config_sync_directory(.*)$"
     line: "$settings['config_sync_directory'] = '../config/sync';"
     mode: 0644
