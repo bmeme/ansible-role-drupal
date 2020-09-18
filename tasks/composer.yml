@@ -11,9 +11,3 @@
   args:
     chdir: "{{ drupal_project_dir }}"
   changed_when: False
-
-- name: Ensure Drush is correctly installed
-  composer:
-    command: require
-    arguments: drush/drush
-    working_dir: "{{ drupal_project_dir }}"

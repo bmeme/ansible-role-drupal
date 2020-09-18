@@ -2,6 +2,12 @@
 - name: Ensure all dependencies are satisfied
   include_tasks: composer.yml
 
+- name: Ensure Drush is correctly installed
+  composer:
+    command: require
+    arguments: drush/drush
+    working_dir: "{{ drupal_project_dir }}"
+
 - name: Execute installation from scratch
   command: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
          --account-mail=\"{{ drupal_account_mail }}\" --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\"
