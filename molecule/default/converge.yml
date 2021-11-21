@@ -10,9 +10,9 @@
 
   roles:
     - { role: geerlingguy.mysql }
-    - { role: ansible-role-drupal }
+    - { role: bmeme.drupal }
 
   tasks:
     - name: Re-exec role
       include_role:
-        name: ansible-role-drupal
+        name: bmeme.drupal

@@ -27,3 +27,8 @@ drupal_profile: "minimal"
 ## Drupal Composer settings
 drupal_composer_nodev: false
 drupal_composer_prefer_dist: false
+## Drupal composer scaffold setting
+## true: running command will be: composer drupal-scaffold
+## false: running command will be: composer drupal:scaffold
+## @see: https://github.com/bmeme/ansible-role-drupal/issues/8
+drupal_scaffold_nonamespace: false

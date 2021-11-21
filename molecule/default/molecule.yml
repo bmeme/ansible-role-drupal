@@ -30,8 +30,8 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
-  - name: php-7.4.8-apache
-    image: bmeme/php:7.4.8-apache
+  - name: php-7.4.16-apache
+    image: bmeme/php:7.4.16-apache
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
