@@ -62,6 +62,7 @@ Available Variables:
 | `drupal_profile` | Drupal installation profile. See [this bug](https://www.drupal.org/project/drupal/issues/2982052) | `minimal` |
 | `drupal_composer_nodev` | Composer "nodev" option. Boolean  | `false` |
 | `drupal_composer_prefer_dist` | Composer "prefer-dist" option. Boolean  | `false` |
+| `drupal_composer_scaffold_nonamespace` | Use composer without namespace to install Drupal Scaffold. Boolean  | `false` |
 
 Workflow
 --------

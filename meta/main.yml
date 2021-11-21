@@ -1,4 +1,5 @@
 galaxy_info:
+  namespace: bmeme
   role_name: drupal
   author: bmeme
   description: This role allows you to create a Drupal project via composer, install it and re-build it by configs
