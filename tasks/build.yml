@@ -1,15 +1,15 @@
 ---
 - name: Ensure all dependencies are satisfied
-  include_tasks: composer.yml
+  ansible.builtin.include_tasks: composer.yml
 
 - name: Install Drupal by configuration
-  command: "{{ drupal_project_dir }}/bin/drush site:install -y --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
-         --account-mail=\"{{ drupal_account_mail }}\" --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\"
-         --existing-config"
+  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush site:install -y --site-name=\"{{ drupal_site_name }}\" \
+    --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
+    --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" --existing-config"
   changed_when: False
 
 - name: Ensure "default" directory is writable by the user
-  file:
+  ansible.builtin.file:
     path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"
     recurse: yes
     owner: "{{ drupal_project_owner }}"
@@ -17,7 +17,7 @@
     mode: u+w
 
 - name: Check if locale is enabled
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail
     bin/drush pm:list --type module --format=csv | grep locale | awk -F, '{print $3}'
   args:
@@ -27,15 +27,15 @@
   changed_when: False
 
 - name: Ensure locale configurations are checked
-  command: "{{ drupal_project_dir }}/bin/drush locale:check -y"
+  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:check -y"
   when:
     - locale_state == 'Enabled'
 
 - name: Update locale traslations are updated
-  command: "{{ drupal_project_dir }}/bin/drush locale:update -y"
+  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:update -y"
   when:
     - locale_state == 'Enabled'
 
 - name: Clear Drupal cache
-  command: "{{ drupal_project_dir }}/bin/drush cr -y"
+  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush cr -y"
   changed_when: False

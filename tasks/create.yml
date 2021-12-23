@@ -1,11 +1,11 @@
 ---
 - name: Ensure temporary directory does not exists
-  file:
+  ansible.builtin.file:
     path: "/tmp/composer-project"
     state: absent
 
 - name: Generate Drupal project with composer package in /tmp/composer-project (this may take a while).
-  composer:
+  community.general.composer:
     command: create-project
     arguments: "{{ drupal_project_composer_project }} composer-project"
     working_dir: /tmp
@@ -13,7 +13,7 @@
     COMPOSER_PROCESS_TIMEOUT: 1200
 
 - name: Ensure drupal_project_dir directory exists and has proper permissions.
-  file:
+  ansible.builtin.file:
     path: "{{ drupal_project_dir }}"
     state: directory
     owner: "{{ drupal_project_owner }}"
@@ -22,31 +22,31 @@
   failed_when: false
 
 - name: Move Drupal project files to drupal_project_dir (this may take a while).
-  command:
+  ansible.builtin.command:
     cmd: "cp -r /tmp/composer-project/. {{ drupal_project_dir }}/"
     creates: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
   become: false
 
 - name: Create Application "bin" directory
-  file:
+  ansible.builtin.file:
     path: "{{ drupal_project_dir }}/bin"
     state: directory
     mode: 0755
 
 - name: Add Bin directory to composer config
-  composer:
+  community.general.composer:
     command: config
     arguments: bin-dir bin/
     working_dir: "{{ drupal_project_dir }}"
 
 - name: Ensure "cweagans/composer-patches" package is installed
-  composer:
+  community.general.composer:
     command: require
     arguments: cweagans/composer-patches
     working_dir: "{{ drupal_project_dir }}"
 
 - name: Create composer.patches.json
-  copy:
+  ansible.builtin.copy:
     dest: "{{ drupal_project_dir }}/composer.patches.json"
     mode: 0644
     content: |
@@ -56,7 +56,7 @@
       }
 
 - name: Add composer.patches.json file to composer config
-  composer:
+  community.general.composer:
     command: config
     arguments: extra.patches-file composer.patches.json
     working_dir: "{{ drupal_project_dir }}"

@@ -14,5 +14,5 @@
 
   tasks:
     - name: Re-exec role
-      include_role:
+      ansible.builtin.include_role:
         name: bmeme.drupal

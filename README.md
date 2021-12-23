@@ -19,6 +19,11 @@ To correctly use this role you will need a classic LAMP/LEMP stack:
 
 **Drush** is a needed dependency that this role will provide in your Drupal project.
 
+Dependencies
+--------------
+- `community.mysql` collection
+- `community.general` collection
+
 Installation
 --------------
 This is an Ansible role distributed using Ansible Galaxy.
