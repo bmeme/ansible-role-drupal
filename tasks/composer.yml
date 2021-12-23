@@ -1,20 +1,20 @@
 ---
 - name: Run composer install (this may take a while).
-  composer:
+  community.general.composer:
     command: install
     working_dir: "{{ drupal_project_dir }}"
     no_dev: "{{ drupal_composer_nodev }}"
     prefer_dist: "{{ drupal_composer_prefer_dist }}"
 
 - name: Install Drupal Scaffold (using namespaces)
-  command: "composer drupal:scaffold"
+  ansible.builtin.command: "composer drupal:scaffold"
   args:
     chdir: "{{ drupal_project_dir }}"
   changed_when: False
   when: not drupal_scaffold_nonamespace or drupal_scaffold_nonamespace is not defined
 
 - name: Install Drupal Scaffold (not using namespaces)
-  command: "composer drupal-scaffold"
+  ansible.builtin.command: "composer drupal-scaffold"
   args:
     chdir: "{{ drupal_project_dir }}"
   changed_when: False
