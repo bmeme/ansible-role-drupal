@@ -1,6 +1,6 @@
 ---
 - name: Ensure if Drupal project exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
   register: drupal_site
   ignore_errors: true
@@ -10,7 +10,7 @@
     drupal_site_exists: "{{ drupal_site.stat.exists|default(false) }}"
 
 - name: Ensure if Drupal config exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ drupal_project_dir }}/config/sync/system.site.yml"
   register: drupal_config
   ignore_errors: true

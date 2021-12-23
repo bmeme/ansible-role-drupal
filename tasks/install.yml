@@ -1,21 +1,22 @@
 ---
 - name: Ensure all dependencies are satisfied
-  include_tasks: composer.yml
+  ansible.builtin.include_tasks: composer.yml
 
 - name: Ensure Drush is correctly installed
-  composer:
+  community.general.composer:
     command: require
     arguments: drush/drush
     working_dir: "{{ drupal_project_dir }}"
 
 - name: Execute installation from scratch
-  command: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_site_name }}\" --site-mail=\"{{ drupal_site_mail }}\"
-         --account-mail=\"{{ drupal_account_mail }}\" --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\"
-         --db-url=\"{{ drupal_db_url }}\" \"{{ drupal_profile }}\""
+  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_site_name }}\" \
+    --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
+    --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" \
+    --db-url=\"{{ drupal_db_url }}\" \"{{ drupal_profile }}\""
   changed_when: False
 
 - name: Ensure "default" directory is writable by the user
-  file:
+  ansible.builtin.file:
     path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"
     recurse: yes
     owner: "{{ drupal_project_owner }}"
@@ -23,19 +24,19 @@
     mode: u+w
 
 - name: Ensure Drupal configuration directory is correctly set
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default/settings.php"
     regexp: "^(.*)config_sync_directory(.*)$"
     line: "$settings['config_sync_directory'] = '../config/sync';"
     mode: 0644
 
 - name: Remove Config directory if exists
-  file:
+  ansible.builtin.file:
     path: "{{ drupal_project_dir }}/config"
     state: absent
 
 - name: Create Config directories structure
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: "{{ drupal_project_owner }}"
@@ -46,11 +47,11 @@
     - "{{ drupal_project_dir }}/config/sync"
 
 - name: Export Drupal Configurations
-  command: "{{ drupal_project_dir }}/bin/drush config:export -y"
+  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush config:export -y"
   changed_when: False
 
 - name: Ensure all files right ownership
-  file:
+  ansible.builtin.file:
     path: "{{ drupal_project_dir }}"
     recurse: yes
     owner: "{{ drupal_project_owner }}"
