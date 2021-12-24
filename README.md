@@ -1,3 +1,7 @@
+![example workflow](https://github.com/bmeme/ansible-role-drupal/actions/workflows/ci.yml/badge.svg?branch=master)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+
 Ansible Role: Drupal
 =========
 [![Build Status](https://travis-ci.org/bmeme/ansible-role-drupal.svg?branch=master)](https://travis-ci.org/bmeme/ansible-role-drupal)
