@@ -15,6 +15,11 @@
     --db-url=\"{{ drupal_db_url }}\" \"{{ drupal_profile }}\""
   changed_when: False
 
+- name: Install locale module
+  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush en -y locale"
+  changed_when: False
+  when: drupal_locale | default(false) | bool
+
 - name: Ensure "default" directory is writable by the user
   ansible.builtin.file:
     path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"

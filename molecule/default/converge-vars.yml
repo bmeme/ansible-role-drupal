@@ -18,3 +18,8 @@ drupal_db_pass: "drupal"
 drupal_db_host: "127.0.0.1"
 drupal_db_port: "3306"
 drupal_db_url: "{{ drupal_db_schema }}://{{ drupal_db_user }}:{{ drupal_db_pass }}@{{ drupal_db_host }}:{{ drupal_db_port }}/{{ drupal_db_name }}"
+drupal_composer_allow_plugin: true
+drupal_composer_nodev: false
+drupal_composer_prefer_dist: false
+drupal_composer_scaffold: false
+drupal_composer_scaffold_namespace: false

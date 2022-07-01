@@ -1,5 +1,5 @@
 ---
-name: Ansible Role Mule CI
+name: Ansible Role Drupal CI
 'on':
   pull_request:
   push:

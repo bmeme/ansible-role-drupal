@@ -1,5 +1,12 @@
 ---
-## Drupal project directory
+## Drupal project settings
+# Settings related to the Drupal project
+# 
+# drupal_project_dir: Drupal project document root
+# drupal_project_owner: system owner of Drupal project files
+# drupal_project_group: system group of Drupal project files
+# drupal_project_composer_project: Drupal composer project
+# drupal_project_web_root: Drupal project web directory
 drupal_project_dir: "/var/www/html"
 drupal_project_owner: "www-data"
 drupal_project_group: "www-data"
@@ -7,11 +14,36 @@ drupal_project_composer_project: "drupal/recommended-project:^9"
 drupal_project_web_root: "web"
 
 ## Drupal install/build settings
+# Settings needed during Drupal installation and/or build
+# 
+# drupal_site_name: Drupal instance title
+# drupal_site_mail: Drupal instance email
+# drupal_account_mail: Drupal instance root account email
+# drupal_account_name: Drupal instance root account name
+# drupal_account_pass: Drupal instance root account password
+# drupal_locale: Enable locale module
+# drupal_profile: Drupal profile to use during installation
+# Do not change!! Due to a bug (https://www.drupal.org/project/drupal/issues/2982052), if you use the "standard" profile
+# you will be unable to build your drupal instance starting from existing configurations.
+# Then, at this stage, using "minimal" is mandatory. When this bug will be solved, we will update this role.
 drupal_site_name: "Your new Drupal instance"
 drupal_site_mail: "info@example.com"
 drupal_account_mail: "{{ drupal_site_mail }}"
 drupal_account_name: "admin"
 drupal_account_pass: "admin"
+drupal_locale: true
+drupal_profile: "minimal"
+
+## Drupal database settings
+# Drupal database connection settings
+#
+# drupal_db_schema: Drupal database schema. Allowed values: mysql or pgsql
+# drupal_db_name: Drupal database name
+# drupal_db_user: Drupal database user
+# drupal_db_pass: Drupal database password
+# drupal_db_host: Drupal database host
+# drupal_db_port: Drupal database port
+# drupal_db_url: Drupal database URL. Do not change!!
 drupal_db_schema: "mysql"
 drupal_db_name: "drupal"
 drupal_db_user: "drupal"
@@ -19,16 +51,17 @@ drupal_db_pass: "drupal"
 drupal_db_host: "127.0.0.1"
 drupal_db_port: "3306"
 drupal_db_url: "{{ drupal_db_schema }}://{{ drupal_db_user }}:{{ drupal_db_pass }}@{{ drupal_db_host }}:{{ drupal_db_port }}/{{ drupal_db_name }}"
-# Due to a bug (https://www.drupal.org/project/drupal/issues/2982052), if you use the standard profile
-# you will be unable to build your pre-existent drupal instance starting from existing configurations.
-# When this bug will be solved, we will update this role.
-drupal_profile: "minimal"
 
 ## Drupal Composer settings
+# Composer related settings
+# 
+# (bool) drupal_composer_allow_plugin: if you want to add allow composer plugin config or not
+# (bool) drupal_composer_nodev: if you don't want to install "require-dev" packages
+# (bool) drupal_composer_prefer_dist: if you want to add prefer-dist setting
+# (bool) drupal_composer_scaffold: if you want to install third-party Drupal scaffold package
+# (bool) drupal_composer_scaffold_namespace: if you want to use namespace in thirdy-party Drupal scaffold package 
+drupal_composer_allow_plugin: false
 drupal_composer_nodev: false
 drupal_composer_prefer_dist: false
-## Drupal composer scaffold setting
-## true: running command will be: composer drupal-scaffold
-## false: running command will be: composer drupal:scaffold
-## @see: https://github.com/bmeme/ansible-role-drupal/issues/8
-drupal_scaffold_nonamespace: false
+drupal_composer_scaffold: true
+drupal_composer_scaffold_namespace: true
