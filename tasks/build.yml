@@ -25,16 +25,18 @@
     chdir: "{{ drupal_project_dir }}"
   register: locale_state
   changed_when: False
+  when: drupal_locale | default(false) | bool
 
 - name: Ensure locale configurations are checked
   ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:check -y"
   when:
-    - locale_state == 'Enabled'
+    - 
+    - locale_state.stdout == 'Enabled'
 
 - name: Update locale traslations are updated
   ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:update -y"
   when:
-    - locale_state == 'Enabled'
+    - locale_state.stdout == 'Enabled'
 
 - name: Clear Drupal cache
   ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush cr -y"

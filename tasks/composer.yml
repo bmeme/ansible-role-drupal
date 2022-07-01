@@ -1,4 +1,17 @@
 ---
+- name: Allow Composer plugins
+  community.general.composer:
+    command: config
+    working_dir: "{{ drupal_project_dir }}"
+    arguments: "allow-plugins.{{ item }} true"
+    no_plugins: true
+  with_items:
+    - composer/installers
+    - cweagans/composer-patches
+    - drupal/core-composer-scaffold
+    - drupal/core-project-message
+  when: drupal_composer_allow_plugin | default(false) | bool
+
 - name: Run composer install (this may take a while).
   community.general.composer:
     command: install
@@ -11,11 +24,15 @@
   args:
     chdir: "{{ drupal_project_dir }}"
   changed_when: False
-  when: not drupal_scaffold_nonamespace or drupal_scaffold_nonamespace is not defined
+  when:
+    - drupal_composer_scaffold | default(false) | bool 
+    - drupal_composer_scaffold_namespace | default(false) | bool
 
 - name: Install Drupal Scaffold (not using namespaces)
   ansible.builtin.command: "composer drupal-scaffold"
   args:
     chdir: "{{ drupal_project_dir }}"
   changed_when: False
-  when: drupal_scaffold_nonamespace | default(false) | bool
+  when:
+    - drupal_composer_scaffold | default(false) | bool 
+    - not drupal_composer_scaffold_namespace
