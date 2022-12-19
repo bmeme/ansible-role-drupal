@@ -2,19 +2,19 @@
 - name: Ensure if Drupal project exists
   ansible.builtin.stat:
     path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/index.php"
-  register: drupal_site
+  register: __drupal_project_exists
   ignore_errors: true
 
 - name: Define drupal_site_exists.
-  set_fact:
-    drupal_site_exists: "{{ drupal_site.stat.exists|default(false) }}"
+  ansible.builtin.set_fact:
+    drupal_site_exists: "{{ __drupal_project_exists.stat.exists | default(false) }}"
 
 - name: Ensure if Drupal config exists
   ansible.builtin.stat:
     path: "{{ drupal_project_dir }}/config/sync/system.site.yml"
-  register: drupal_config
+  register: __drupal_config_exists
   ignore_errors: true
 
 - name: Define drupal_config_exists
-  set_fact:
-    drupal_config_exists: "{{ drupal_config.stat.exists|default(false) }}"
+  ansible.builtin.set_fact:
+    drupal_config_exists: "{{ __drupal_config_exists.stat.exists | default(false) }}"
