@@ -10,7 +10,7 @@
 drupal_project_dir: "/var/www/html"
 drupal_project_owner: "www-data"
 drupal_project_group: "www-data"
-drupal_project_composer_project: "drupal/recommended-project:^9"
+drupal_project_composer_project: "drupal/recommended-project"
 drupal_project_web_root: "web"
 
 ## Drupal install/build settings
@@ -56,11 +56,17 @@ drupal_db_url: "{{ drupal_db_schema }}://{{ drupal_db_user }}:{{ drupal_db_pass 
 # Composer related settings
 # 
 # (bool) drupal_composer_allow_plugin: if you want to add allow composer plugin config or not
+# (map) drupal_composer_allowed_plugins: the list of plugins you need to allow
 # (bool) drupal_composer_nodev: if you don't want to install "require-dev" packages
 # (bool) drupal_composer_prefer_dist: if you want to add prefer-dist setting
 # (bool) drupal_composer_scaffold: if you want to install third-party Drupal scaffold package
 # (bool) drupal_composer_scaffold_namespace: if you want to use namespace in thirdy-party Drupal scaffold package 
 drupal_composer_allow_plugin: false
+drupal_composer_allowed_plugins: 
+  - composer/installers
+  - cweagans/composer-patches
+  - drupal/core-composer-scaffold
+  - drupal/core-project-message
 drupal_composer_nodev: false
 drupal_composer_prefer_dist: false
 drupal_composer_scaffold: true

@@ -5,12 +5,11 @@
     working_dir: "{{ drupal_project_dir }}"
     arguments: "allow-plugins.{{ item }} true"
     no_plugins: true
-  with_items:
-    - composer/installers
-    - cweagans/composer-patches
-    - drupal/core-composer-scaffold
-    - drupal/core-project-message
-  when: drupal_composer_allow_plugin | default(false) | bool
+  with_items: "{{ drupal_composer_allowed_plugins }}"
+  when: 
+    - drupal_composer_allow_plugin | default(false) | bool
+    - drupal_composer_allowed_plugins is defined
+    - drupal_composer_allowed_plugins | length > 0
 
 - name: Run composer install (this may take a while).
   community.general.composer:

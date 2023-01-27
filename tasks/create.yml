@@ -39,6 +39,18 @@
     arguments: bin-dir bin/
     working_dir: "{{ drupal_project_dir }}"
 
+- name: Allow Composer plugins
+  community.general.composer:
+    command: config
+    working_dir: "{{ drupal_project_dir }}"
+    arguments: "allow-plugins.{{ item }} true"
+    no_plugins: true
+  with_items: "{{ drupal_composer_allowed_plugins }}"
+  when: 
+    - drupal_composer_allow_plugin | default(false) | bool
+    - drupal_composer_allowed_plugins is defined
+    - drupal_composer_allowed_plugins | length > 0
+
 - name: Ensure "cweagans/composer-patches" package is installed
   community.general.composer:
     command: require
