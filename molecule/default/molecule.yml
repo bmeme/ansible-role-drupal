@@ -23,8 +23,15 @@ lint: |
   yamllint .
   ansible-lint -x 106 208
 platforms:
-  - name: php-8.1.2-apache-buster
-    image: bmeme/php:8.1.2-apache-buster
+  - name: php-8.1.14-apache-buster
+    image: bmeme/php:8.1.14-apache-buster
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+  - name: php-8.2.1-apache-buster
+    image: bmeme/php:8.2.1-apache-buster
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
