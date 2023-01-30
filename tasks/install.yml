@@ -13,11 +13,15 @@
     --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
     --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" \
     --db-url=\"{{ drupal_db_url }}\" \"{{ drupal_profile }}\""
-  changed_when: False
+  register: __install_from_scratch
+  changed_when: false
+  failed_when: __install_from_scratch.rc != 0
 
 - name: Install locale module
   ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush en -y locale"
-  changed_when: False
+  register: __enable_locale
+  changed_when: false
+  failed_when: __enable_locale.rc != 0
   when: drupal_locale | default(false) | bool
 
 - name: Ensure "default" directory is writable by the user
@@ -53,7 +57,9 @@
 
 - name: Export Drupal Configurations
   ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush config:export -y"
-  changed_when: False
+  register: __export_config
+  changed_when: false
+  failed_when: __export_config.rc != 0
 
 - name: Ensure all files right ownership
   ansible.builtin.file:

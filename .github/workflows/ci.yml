@@ -5,6 +5,7 @@ name: Ansible Role Drupal CI
   push:
     branches:
       - master
+      - main
 
 defaults:
   run:
@@ -27,11 +28,12 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install yamllint
+        run: pip3 install yamllint ansible-lint
 
       - name: Lint code.
         run: |
           yamllint .
+          ansible-lint -x 106 208
 
   molecule:
     name: Molecule
@@ -54,7 +56,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker ansible-lint
+        run: pip3 install ansible molecule[docker] docker
 
       - name: Run Molecule tests.
         run: molecule test

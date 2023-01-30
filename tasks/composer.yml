@@ -22,16 +22,20 @@
   ansible.builtin.command: "composer drupal:scaffold"
   args:
     chdir: "{{ drupal_project_dir }}"
-  changed_when: False
+  register: __install_scaffold
+  changed_when: false
+  failed_when: __install_scaffold.rc != 0
   when:
-    - drupal_composer_scaffold | default(false) | bool 
+    - drupal_composer_scaffold | default(false) | bool
     - drupal_composer_scaffold_namespace | default(false) | bool
 
 - name: Install Drupal Scaffold (not using namespaces)
   ansible.builtin.command: "composer drupal-scaffold"
+  register: __install_scaffold
+  changed_when: false
+  failed_when: __install_scaffold.rc != 0
   args:
     chdir: "{{ drupal_project_dir }}"
-  changed_when: False
   when:
-    - drupal_composer_scaffold | default(false) | bool 
+    - drupal_composer_scaffold | default(false) | bool
     - not drupal_composer_scaffold_namespace

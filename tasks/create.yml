@@ -10,7 +10,7 @@
     arguments: "{{ drupal_project_composer_project }} composer-project"
     working_dir: /tmp
   environment:
-    COMPOSER_PROCESS_TIMEOUT: 1200
+    COMPOSER_PROCESS_TIMEOUT: "1200"
 
 - name: Ensure drupal_project_dir directory exists and has proper permissions.
   ansible.builtin.file:

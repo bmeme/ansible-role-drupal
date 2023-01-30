@@ -1,49 +1,58 @@
 ---
-# tasks file for ansible-role-drupal
-- ansible.builtin.include_tasks: setup.yml
+- name: Setup variables and assertions
+  ansible.builtin.include_tasks: setup.yml
   tags: [ 'setup' ]
 
-- ansible.builtin.include_tasks: "{{ drupal_before_create | default('empty.yml') }}"
+- name: Include before-create tasks
+  ansible.builtin.include_tasks: "{{ drupal_before_create | default('empty.yml') }}"
   tags: [ 'create' ]
   when:
     - not drupal_site_exists
 
-- ansible.builtin.include_tasks: create.yml
+- name: Create a brand new Drupal project
+  ansible.builtin.include_tasks: create.yml
   tags: [ 'create' ]
   when:
     - not drupal_site_exists
 
-- ansible.builtin.include_tasks: "{{ drupal_after_create | default('empty.yml') }}"
+- name: Include after-create tasks
+  ansible.builtin.include_tasks: "{{ drupal_after_create | default('empty.yml') }}"
   tags: [ 'create' ]
   when:
     - not drupal_site_exists
 
-- ansible.builtin.include_tasks: "{{ drupal_before_install | default('empty.yml') }}"
+- name: Include before-install tasks
+  ansible.builtin.include_tasks: "{{ drupal_before_install | default('empty.yml') }}"
   tags: [ 'install' ]
   when:
     - not drupal_config_exists
 
-- ansible.builtin.include_tasks: install.yml
+- name: Install a new Drupal instance
+  ansible.builtin.include_tasks: install.yml
   tags: [ 'install' ]
   when:
     - not drupal_config_exists
 
-- ansible.builtin.include_tasks: "{{ drupal_after_install | default('empty.yml') }}"
+- name: Include after-install tasks
+  ansible.builtin.include_tasks: "{{ drupal_after_install | default('empty.yml') }}"
   tags: [ 'install' ]
   when:
     - not drupal_config_exists
 
-- ansible.builtin.include_tasks: "{{ drupal_before_build | default('empty.yml') }}"
+- name: Include before-build tasks
+  ansible.builtin.include_tasks: "{{ drupal_before_build | default('empty.yml') }}"
   tags: [ 'build' ]
   when:
     - drupal_config_exists
 
-- ansible.builtin.include_tasks: build.yml
+- name: Build an existing Drupal instance
+  ansible.builtin.include_tasks: build.yml
   tags: [ 'build' ]
   when:
     - drupal_config_exists
 
-- ansible.builtin.include_tasks: "{{ drupal_after_build | default('empty.yml') }}"
+- name: Include after-build tasks
+  ansible.builtin.include_tasks: "{{ drupal_after_build | default('empty.yml') }}"
   tags: [ 'build' ]
   when:
     - drupal_config_exists
