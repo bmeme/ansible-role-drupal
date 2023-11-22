@@ -48,28 +48,29 @@ Role Variables
 --------------
 Available Variables:
 
-| Variable Name  | Description  | Default  |
-|----------------|--------------|----------|
-| `drupal_project_dir` | Absolute path in which the Drupal project is or have to be installed| `/var/www/html`|
-| `drupal_project_owner` | The system user that has the project ownership | `www-data` |
-| `drupal_project_group` | The system group that has the project ownership | `www-data` |
-| `drupal_project_composer_project` | The Drupal composer project you want to use to install it freshly | `drupal/recommended-project:^9` |
-| `drupal_project_web_root` | Directory in which is stored Drupal core. It may depend on the Drupal distribution. | `web` |
-| `drupal_site_name` | Drupal site name. Used by drush during Drupal installation. | `Your new Drupal instance` |
-| `drupal_site_mail` | Drupal site mail. Used by drush during Drupal installation. | `info@example.com` |
-| `drupal_account_mail` | Drupal account mail. Used by drush during Drupal installation. | same as `drupal_site_mail` |
-| `drupal_account_name` | Drupal account name. Used by drush during Drupal installation. | `admin` |
-| `drupal_account_pass` | Drupal account pass. Used by drush during Drupal installation. | `admin` |
-| `drupal_db_schema` | Database schema to be used by Drupal. Available options: `mysql` or `pgsql` | `mysql` |
-| `drupal_db_name` | Database name. Used by drush during Drupal installation. | `drupal` |
-| `drupal_db_user` | Database user. Used by drush during Drupal installation. | `drupal` |
-| `drupal_db_pass` | Database user password. Used by drush during Drupal installation. | `drupal` |
-| `drupal_db_host` | Database host address. Used by drush during Drupal installation. | `127.0.0.1` |
-| `drupal_db_port` | Database host port. Used by drush during Drupal installation. | `3306` |
-| `drupal_profile` | Drupal installation profile. See [this bug](https://www.drupal.org/project/drupal/issues/2982052) | `minimal` |
-| `drupal_composer_nodev` | Composer "nodev" option. Boolean  | `false` |
-| `drupal_composer_prefer_dist` | Composer "prefer-dist" option. Boolean  | `false` |
-| `drupal_composer_scaffold_nonamespace` | Use composer without namespace to install Drupal Scaffold. Boolean  | `false` |
+| Variable Name                          | Description                                                                                       | Default                      |
+|----------------------------------------|---------------------------------------------------------------------------------------------------|------------------------------|
+| `drupal_project_dir`                   | Absolute path in which the Drupal project is or have to be installed                              | `/var/www/html`              |
+| `drupal_project_owner`                 | The system user that has the project ownership                                                    | `www-data`                   |
+| `drupal_project_group`                 | The system group that has the project ownership                                                   | `www-data`                   |
+| `drupal_project_composer_project`      | The Drupal composer project you want to use to install it freshly                                 | `drupal/recommended-project` |
+| `drupal_project_web_root`              | Directory in which is stored Drupal core. It may depend on the Drupal distribution.               | `web`                        |
+| `drupal_site_name`                     | Drupal site name. Used by drush during Drupal installation.                                       | `Your new Drupal instance`   |
+| `drupal_site_mail`                     | Drupal site mail. Used by drush during Drupal installation.                                       | `info@example.com`           |
+| `drupal_site_lang`                     | Drupal site default language. Used by drush during Drupal installation.                           | `en`                         |
+| `drupal_account_mail`                  | Drupal account mail. Used by drush during Drupal installation.                                    | same as `drupal_site_mail`   |
+| `drupal_account_name`                  | Drupal account name. Used by drush during Drupal installation.                                    | `admin`                      |
+| `drupal_account_pass`                  | Drupal account pass. Used by drush during Drupal installation.                                    | `admin`                      |
+| `drupal_db_schema`                     | Database schema to be used by Drupal. Available options: `mysql` or `pgsql`                       | `mysql`                      |
+| `drupal_db_name`                       | Database name. Used by drush during Drupal installation.                                          | `drupal`                     |
+| `drupal_db_user`                       | Database user. Used by drush during Drupal installation.                                          | `drupal`                     |
+| `drupal_db_pass`                       | Database user password. Used by drush during Drupal installation.                                 | `drupal`                     |
+| `drupal_db_host`                       | Database host address. Used by drush during Drupal installation.                                  | `127.0.0.1`                  |
+| `drupal_db_port`                       | Database host port. Used by drush during Drupal installation.                                     | `3306`                       |
+| `drupal_profile`                       | Drupal installation profile. See [this bug](https://www.drupal.org/project/drupal/issues/2982052) | `minimal`                    |
+| `drupal_composer_nodev`                | Composer "nodev" option. Boolean                                                                  | `false`                      |
+| `drupal_composer_prefer_dist`          | Composer "prefer-dist" option. Boolean                                                            | `false`                      |
+| `drupal_composer_scaffold_nonamespace` | Use composer without namespace to install Drupal Scaffold. Boolean                                | `false`                      |
 
 Workflow
 --------

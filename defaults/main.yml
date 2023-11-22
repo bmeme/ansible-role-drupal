@@ -18,6 +18,7 @@ drupal_project_web_root: "web"
 # 
 # drupal_site_name: Drupal instance title
 # drupal_site_mail: Drupal instance email
+# drupal_site_lang: Drupal instance default language
 # drupal_account_mail: Drupal instance root account email
 # drupal_account_name: Drupal instance root account name
 # drupal_account_pass: Drupal instance root account password
@@ -28,6 +29,7 @@ drupal_project_web_root: "web"
 # Then, at this stage, using "minimal" is mandatory. When this bug will be solved, we will update this role.
 drupal_site_name: "Your new Drupal instance"
 drupal_site_mail: "info@example.com"
+drupal_site_lang: "en"
 drupal_account_mail: "{{ drupal_site_mail }}"
 drupal_account_name: "admin"
 drupal_account_pass: "admin"
