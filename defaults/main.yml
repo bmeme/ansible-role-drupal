@@ -1,7 +1,7 @@
 ---
 ## Drupal project settings
 # Settings related to the Drupal project
-# 
+#
 # drupal_project_dir: Drupal project document root
 # drupal_project_owner: system owner of Drupal project files
 # drupal_project_group: system group of Drupal project files
@@ -15,7 +15,7 @@ drupal_project_web_root: "web"
 
 ## Drupal install/build settings
 # Settings needed during Drupal installation and/or build
-# 
+#
 # drupal_site_name: Drupal instance title
 # drupal_site_mail: Drupal instance email
 # drupal_site_lang: Drupal instance default language
@@ -24,9 +24,10 @@ drupal_project_web_root: "web"
 # drupal_account_pass: Drupal instance root account password
 # drupal_locale: Enable locale module
 # drupal_profile: Drupal profile to use during installation
-# Do not change!! Due to a bug (https://www.drupal.org/project/drupal/issues/2982052), if you use the "standard" profile
-# you will be unable to build your drupal instance starting from existing configurations.
-# Then, at this stage, using "minimal" is mandatory. When this bug will be solved, we will update this role.
+# Due to a bug (https://www.drupal.org/project/drupal/issues/2982052), 
+# if you use the "standard" profile you will be unable to build your 
+# drupal instance starting from existing configurations.
+# Then, at this stage, using "minimal" is recommended.
 drupal_site_name: "Your new Drupal instance"
 drupal_site_mail: "info@example.com"
 drupal_site_lang: "en"
@@ -56,15 +57,21 @@ drupal_db_url: "{{ drupal_db_schema }}://{{ drupal_db_user }}:{{ drupal_db_pass 
 
 ## Drupal Composer settings
 # Composer related settings
-# 
-# (bool) drupal_composer_allow_plugin: if you want to add allow composer plugin config or not
-# (map) drupal_composer_allowed_plugins: the list of plugins you need to allow
-# (bool) drupal_composer_nodev: if you don't want to install "require-dev" packages
-# (bool) drupal_composer_prefer_dist: if you want to add prefer-dist setting
-# (bool) drupal_composer_scaffold: if you want to install third-party Drupal scaffold package
-# (bool) drupal_composer_scaffold_namespace: if you want to use namespace in thirdy-party Drupal scaffold package 
+#
+# (bool) drupal_composer_allow_plugin: 
+#   if you want to add allow composer plugin config or not
+# (map) drupal_composer_allowed_plugins: 
+#   the list of plugins you need to allow
+# (bool) drupal_composer_nodev: 
+#   if you don't want to install "require-dev" packages
+# (bool) drupal_composer_prefer_dist: 
+#   if you want to add prefer-dist setting
+# (bool) drupal_composer_scaffold: 
+#   if you want to install third-party Drupal scaffold package
+# (bool) drupal_composer_scaffold_namespace: 
+#   if you want to use namespace in thirdy-party Drupal scaffold package 
 drupal_composer_allow_plugin: false
-drupal_composer_allowed_plugins: 
+drupal_composer_allowed_plugins:
   - composer/installers
   - cweagans/composer-patches
   - drupal/core-composer-scaffold

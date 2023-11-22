@@ -1,0 +1,7 @@
+---
+skip_list:
+  - 'yaml'
+  - 'role-name'
+
+exclude_paths:
+  - 'tasks/main.yml'
