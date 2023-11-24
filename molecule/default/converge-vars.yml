@@ -1,5 +1,6 @@
+---
 mysql_python_package_debian: python3-mysqldb
-mysql_daemon: mysql
+mysql_daemon: mariadb
 mysql_databases:
   - name: "{{ drupal_db_name }}"
     encoding: utf8mb4
@@ -7,6 +8,21 @@ mysql_databases:
 mysql_users:
   - name: "{{ drupal_db_user }}"
     host: "%"
+    password: "{{ drupal_db_pass }}"
+    priv: "{{ drupal_db_name }}.*:ALL"
+
+mariadb_server_params:
+  - option: "sql_mode"
+    section: "mysqld"
+    value: "ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+  - option: "innodb_buffer_pool_size"
+    section: "mysqld"
+    value: "2G"
+mariadb_databases:
+  - "{{ drupal_db_name }}"
+mariadb_users:
+  - host: "%"
+    name: "{{ drupal_db_user }}"
     password: "{{ drupal_db_pass }}"
     priv: "{{ drupal_db_name }}.*:ALL"
 
@@ -23,3 +39,4 @@ drupal_composer_nodev: false
 drupal_composer_prefer_dist: false
 drupal_composer_scaffold: false
 drupal_composer_scaffold_namespace: false
+drupal_site_lang: "it"

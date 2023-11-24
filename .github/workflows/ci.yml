@@ -17,51 +17,46 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v2
+      -
+        name: Check out the codebase.
+        uses: actions/checkout@v4
         with:
           path: 'bmeme.drupal'
-
-      - name: Set up Python 3.
-        uses: actions/setup-python@v2
+      -
+        name: Run yamllint
+        uses: karancode/yamllint-github-action@master
         with:
-          python-version: '3.x'
-
-      - name: Install test dependencies.
-        run: pip3 install yamllint ansible-lint
-
-      - name: Lint code.
+          yamllint_config_filepath: '${{ github.workspace }}/bmeme.drupal/.yamllint'
+      -
+        name: Setup ansible-lint
+        uses: bec-galaxy/setup-lint@v1
+      -
+        name: Run ansible-lint
         run: |
-          yamllint .
-          ansible-lint -x 106 208
+          ansible-galaxy install -r requirements.yml; \
+          ansible-lint .
 
   molecule:
-    name: Molecule
+    name: Run molecule test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - distro: ubuntu2004
-            playbook: converge.yml
-
+    needs: [lint]
     steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v2
+      - 
+        name: Check out the codebase.
+        uses: actions/checkout@v4
         with:
           path: 'bmeme.drupal'
-
-      - name: Set up Python 3.
-        uses: actions/setup-python@v2
+      -
+        name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
-
-      - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker
-
-      - name: Run Molecule tests.
+          python-version: '3.11'
+      -
+        name: Install dependencies.
+        run: pip3 install ansible molecule-plugins[docker] docker
+      - 
+        name: Run Molecule tests.
         run: molecule test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
-          MOLECULE_PLAYBOOK: ${{ matrix.playbook }}

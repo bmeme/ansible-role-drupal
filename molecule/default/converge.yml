@@ -1,6 +1,7 @@
 ---
 - name: Converge
   hosts: all
+  serial: 1
 
   environment:
     COMPOSER_MEMORY_LIMIT: '-1'
@@ -8,9 +9,59 @@
   vars_files:
     - converge-vars.yml
 
+  pre_tasks:
+    - name: Install mariadb packages
+      ansible.builtin.apt:
+        pkg: "{{ item }}"
+        state: present
+        update_cache: true
+      with_items:
+        - mariadb-server
+        - mariadb-client
+        - python3-pymysql
+
+    - name: Create .my.cnf file under root
+      ansible.builtin.copy:
+        dest: "/root/.my.cnf"
+        content: |
+          [client]
+          user=root
+          password=supersecretpasswd
+
+    - name: Ensure mysql is running and starts on boot
+      ansible.builtin.service:
+        name: mariadb
+        state: started
+        enabled: true
+
+    - name: Create root password protected user
+      community.mysql.mysql_user:
+        name: root
+        host: "%"
+        password: "supersecretpasswd"
+        priv: '*.*:ALL,GRANT'
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+  
+    - name: create mariadb databases
+      mysql_db:
+        name: "{{ item }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+      loop: "{{ mariadb_databases }}"
+
+    - name: create mariadb users
+      mysql_user:
+        name: "{{ item.name }}"
+        host: "{{ item.host }}"
+        password: "{{ item.password }}"
+        priv: "{{ item.priv }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+      loop: "{{ mariadb_users }}"
+
   roles:
-    - { role: geerlingguy.mysql }
-    - { role: bmeme.drupal }
+    - {role: bmeme.drupal}
 
   tasks:
     - name: Re-exec role

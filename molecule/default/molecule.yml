@@ -1,15 +1,16 @@
 ---
+# Idempotence test is disabled
+# @see https://github.com/geerlingguy/ansible-role-drupal/issues/77
 scenario:
   test_sequence:
     - dependency
-    - lint
     - cleanup
     - destroy
     - syntax
     - create
     - prepare
     - converge
-#    - idempotence #this due to a bug as reported here: https://github.com/geerlingguy/ansible-role-drupal/issues/77
+    #- idempotence
     - side_effect
     - verify
     - cleanup
@@ -18,19 +19,9 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint: |
-  set -e
-  yamllint .
 platforms:
-  - name: php-8.1.14-apache-buster
-    image: bmeme/php:8.1.14-apache-buster
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    pre_build_image: true
-  - name: php-8.2.1-apache-buster
-    image: bmeme/php:8.2.1-apache-buster
+  - name: php82
+    image: bmeme/php:8.2.12-apache-bullseye
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -41,4 +32,4 @@ provisioner:
   log: true
 verifier:
   name: ansible
-  enabled: False
+  enabled: false

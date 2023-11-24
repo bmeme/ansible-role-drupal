@@ -12,7 +12,7 @@
   ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_site_name }}\" \
     --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
     --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" \
-    --db-url=\"{{ drupal_db_url }}\" \"{{ drupal_profile }}\""
+    --db-url=\"{{ drupal_db_url }}\" --locale=\"{{ drupal_site_lang }}\" \"{{ drupal_profile }}\""
   register: __install_from_scratch
   changed_when: false
   failed_when: __install_from_scratch.rc != 0
