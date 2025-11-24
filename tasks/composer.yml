@@ -1,41 +1,44 @@
 ---
-- name: Allow Composer plugins
-  community.general.composer:
-    command: config
-    working_dir: "{{ drupal_project_dir }}"
-    arguments: "allow-plugins.{{ item }} true"
-    no_plugins: true
-  with_items: "{{ drupal_composer_allowed_plugins }}"
-  when: 
-    - drupal_composer_allow_plugin | default(false) | bool
-    - drupal_composer_allowed_plugins is defined
-    - drupal_composer_allowed_plugins | length > 0
+- name: Composer dependencies
+  tags: [ 'install', 'build' ]
+  block:
+    - name: Allow Composer plugins
+      community.general.composer:
+        command: config
+        working_dir: "{{ drupal_project_dir }}"
+        arguments: "allow-plugins.{{ item }} true"
+        no_plugins: true
+      with_items: "{{ drupal_composer_allowed_plugins }}"
+      when: 
+        - drupal_composer_allow_plugin | default(false) | bool
+        - drupal_composer_allowed_plugins is defined
+        - drupal_composer_allowed_plugins | length > 0
 
-- name: Run composer install (this may take a while).
-  community.general.composer:
-    command: install
-    working_dir: "{{ drupal_project_dir }}"
-    no_dev: "{{ drupal_composer_nodev }}"
-    prefer_dist: "{{ drupal_composer_prefer_dist }}"
+    - name: Run composer install (this may take a while).
+      community.general.composer:
+        command: install
+        working_dir: "{{ drupal_project_dir }}"
+        no_dev: "{{ drupal_composer_nodev }}"
+        prefer_dist: "{{ drupal_composer_prefer_dist }}"
 
-- name: Install Drupal Scaffold (using namespaces)
-  ansible.builtin.command: "composer drupal:scaffold"
-  args:
-    chdir: "{{ drupal_project_dir }}"
-  register: __install_scaffold
-  changed_when: false
-  failed_when: __install_scaffold.rc != 0
-  when:
-    - drupal_composer_scaffold | default(false) | bool
-    - drupal_composer_scaffold_namespace | default(false) | bool
+    - name: Install Drupal Scaffold (using namespaces)
+      ansible.builtin.command: "composer drupal:scaffold"
+      args:
+        chdir: "{{ drupal_project_dir }}"
+      register: __install_scaffold
+      changed_when: false
+      failed_when: __install_scaffold.rc != 0
+      when:
+        - drupal_composer_scaffold | default(false) | bool
+        - drupal_composer_scaffold_namespace | default(false) | bool
 
-- name: Install Drupal Scaffold (not using namespaces)
-  ansible.builtin.command: "composer drupal-scaffold"
-  register: __install_scaffold
-  changed_when: false
-  failed_when: __install_scaffold.rc != 0
-  args:
-    chdir: "{{ drupal_project_dir }}"
-  when:
-    - drupal_composer_scaffold | default(false) | bool
-    - not drupal_composer_scaffold_namespace
+    - name: Install Drupal Scaffold (not using namespaces)
+      ansible.builtin.command: "composer drupal-scaffold"
+      register: __install_scaffold
+      changed_when: false
+      failed_when: __install_scaffold.rc != 0
+      args:
+        chdir: "{{ drupal_project_dir }}"
+      when:
+        - drupal_composer_scaffold | default(false) | bool
+        - not drupal_composer_scaffold_namespace

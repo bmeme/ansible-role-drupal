@@ -1,53 +1,57 @@
 ---
-- name: Ensure all dependencies are satisfied
-  ansible.builtin.include_tasks: composer.yml
+- name: Build Drupal from configuration
+  tags: [ 'build' ]
+  block:
+    - name: Ensure all dependencies are satisfied
+      ansible.builtin.include_tasks: composer.yml
 
-- name: Install Drupal by configuration
-  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush site:install -y --site-name=\"{{ drupal_site_name }}\" \
-    --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
-    --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" --existing-config"
-  register: __install_by_config
-  changed_when: false
-  failed_when: __install_by_config.rc != 0
+    - name: Install Drupal by configuration
+      ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush site:install -y --site-name=\"{{ drupal_site_name }}\" \
+        --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
+        --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" --existing-config"
+      register: __install_by_config
+      changed_when: false
+      failed_when: __install_by_config.rc != 0
 
-- name: Ensure "default" directory is writable by the user
-  ansible.builtin.file:
-    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"
-    recurse: yes
-    owner: "{{ drupal_project_owner }}"
-    group: "{{ drupal_project_group }}"
-    mode: u+w
+    - name: Ensure "default" directory is writable by the user
+      ansible.builtin.file:
+        path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"
+        recurse: yes
+        owner: "{{ drupal_project_owner }}"
+        group: "{{ drupal_project_group }}"
+        mode: u+w
+      when: drupal_check_permissions | default(false) | bool
 
-- name: Check if locale is enabled
-  ansible.builtin.shell: |
-    set -o pipefail
-    bin/drush pm:list --type module --format=csv | grep locale | awk -F, '{print $3}'
-  args:
-    executable: /bin/bash
-    chdir: "{{ drupal_project_dir }}"
-  register: __locale_state
-  changed_when: false
-  failed_when: __locale_state.rc != 0
-  when: drupal_locale | default(false) | bool
+    - name: Check if locale is enabled
+      ansible.builtin.shell: |
+        set -o pipefail
+        bin/drush pm:list --type module --format=csv | grep locale | awk -F, '{print $3}'
+      args:
+        executable: /bin/bash
+        chdir: "{{ drupal_project_dir }}"
+      register: __locale_state
+      changed_when: false
+      failed_when: __locale_state.rc != 0
+      when: drupal_locale | default(false) | bool
 
-- name: Ensure locale configurations are checked
-  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:check -y"
-  register: __locale_check
-  changed_when: false
-  failed_when: __locale_check.rc != 0
-  when:
-    - __locale_state.stdout == 'Enabled'
+    - name: Ensure locale configurations are checked
+      ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:check -y"
+      register: __locale_check
+      changed_when: false
+      failed_when: __locale_check.rc != 0
+      when:
+        - __locale_state.stdout == 'Enabled'
 
-- name: Update locale traslations are updated
-  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:update -y"
-  register: __locale_update
-  changed_when: false
-  failed_when: __locale_update.rc != 0
-  when:
-    - __locale_state.stdout == 'Enabled'
+    - name: Update locale traslations are updated
+      ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush locale:update -y"
+      register: __locale_update
+      changed_when: false
+      failed_when: __locale_update.rc != 0
+      when:
+        - __locale_state.stdout == 'Enabled'
 
-- name: Clear Drupal cache
-  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush cr -y"
-  register: __clear_cache
-  changed_when: false
-  failed_when: __clear_cache.rc != 0
+    - name: Clear Drupal cache
+      ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush cr -y"
+      register: __clear_cache
+      changed_when: false
+      failed_when: __clear_cache.rc != 0
