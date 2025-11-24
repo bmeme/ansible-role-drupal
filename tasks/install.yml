@@ -1,69 +1,72 @@
 ---
-- name: Ensure all dependencies are satisfied
-  ansible.builtin.include_tasks: composer.yml
+- name: Install Drupal
+  tags: [ 'install' ]
+  block:
+    - name: Ensure all dependencies are satisfied
+      ansible.builtin.include_tasks: composer.yml
 
-- name: Ensure Drush is correctly installed
-  community.general.composer:
-    command: require
-    arguments: drush/drush
-    working_dir: "{{ drupal_project_dir }}"
+    - name: Ensure Drush is correctly installed
+      community.general.composer:
+        command: require
+        arguments: drush/drush
+        working_dir: "{{ drupal_project_dir }}"
 
-- name: Execute installation from scratch
-  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_site_name }}\" \
-    --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
-    --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" \
-    --db-url=\"{{ drupal_db_url }}\" --locale=\"{{ drupal_site_lang }}\" \"{{ drupal_profile }}\""
-  register: __install_from_scratch
-  changed_when: false
-  failed_when: __install_from_scratch.rc != 0
+    - name: Execute installation from scratch
+      ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush site:install --site-name=\"{{ drupal_site_name }}\" \
+        --site-mail=\"{{ drupal_site_mail }}\" --account-mail=\"{{ drupal_account_mail }}\" \
+        --account-name=\"{{ drupal_account_name }}\" --account-pass=\"{{ drupal_account_pass }}\" \
+        --db-url=\"{{ drupal_db_url }}\" --locale=\"{{ drupal_site_lang }}\" \"{{ drupal_profile }}\""
+      register: __install_from_scratch
+      changed_when: false
+      failed_when: __install_from_scratch.rc != 0
 
-- name: Install locale module
-  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush en -y locale"
-  register: __enable_locale
-  changed_when: false
-  failed_when: __enable_locale.rc != 0
-  when: drupal_locale | default(false) | bool
+    - name: Install locale module
+      ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush en -y locale"
+      register: __enable_locale
+      changed_when: false
+      failed_when: __enable_locale.rc != 0
+      when: drupal_locale | default(false) | bool
 
-- name: Ensure "default" directory is writable by the user
-  ansible.builtin.file:
-    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"
-    recurse: yes
-    owner: "{{ drupal_project_owner }}"
-    group: "{{ drupal_project_group }}"
-    mode: u+w
+    - name: Ensure "default" directory is writable by the user
+      ansible.builtin.file:
+        path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default"
+        recurse: yes
+        owner: "{{ drupal_project_owner }}"
+        group: "{{ drupal_project_group }}"
+        mode: u+w
 
-- name: Ensure Drupal configuration directory is correctly set
-  ansible.builtin.lineinfile:
-    path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default/settings.php"
-    regexp: "^(.*)config_sync_directory(.*)$"
-    line: "$settings['config_sync_directory'] = '../config/sync';"
-    mode: 0644
+    - name: Ensure Drupal configuration directory is correctly set
+      ansible.builtin.lineinfile:
+        path: "{{ drupal_project_dir }}/{{ drupal_project_web_root }}/sites/default/settings.php"
+        regexp: "^(.*)config_sync_directory(.*)$"
+        line: "$settings['config_sync_directory'] = '../config/sync';"
+        mode: 0644
 
-- name: Remove Config directory if exists
-  ansible.builtin.file:
-    path: "{{ drupal_project_dir }}/config"
-    state: absent
+    - name: Remove Config directory if exists
+      ansible.builtin.file:
+        path: "{{ drupal_project_dir }}/config"
+        state: absent
 
-- name: Create Config directories structure
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ drupal_project_owner }}"
-    group: "{{ drupal_project_group }}"
-    mode: 0775
-  with_items:
-    - "{{ drupal_project_dir }}/config"
-    - "{{ drupal_project_dir }}/config/sync"
+    - name: Create Config directories structure
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ drupal_project_owner }}"
+        group: "{{ drupal_project_group }}"
+        mode: 0775
+      with_items:
+        - "{{ drupal_project_dir }}/config"
+        - "{{ drupal_project_dir }}/config/sync"
 
-- name: Export Drupal Configurations
-  ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush config:export -y"
-  register: __export_config
-  changed_when: false
-  failed_when: __export_config.rc != 0
+    - name: Export Drupal Configurations
+      ansible.builtin.command: "{{ drupal_project_dir }}/bin/drush config:export -y"
+      register: __export_config
+      changed_when: false
+      failed_when: __export_config.rc != 0
 
-- name: Ensure all files right ownership
-  ansible.builtin.file:
-    path: "{{ drupal_project_dir }}"
-    recurse: yes
-    owner: "{{ drupal_project_owner }}"
-    group: "{{ drupal_project_group }}"
+    - name: Ensure all files right ownership
+      ansible.builtin.file:
+        path: "{{ drupal_project_dir }}"
+        recurse: yes
+        owner: "{{ drupal_project_owner }}"
+        group: "{{ drupal_project_group }}"
